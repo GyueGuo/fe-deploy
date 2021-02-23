@@ -2,23 +2,52 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { Router, Route } from 'react-router';
 import { createBrowserHistory } from 'history';
-import routes from './routes';
 
-function renderRoutes(conf) {
-  return (conf && conf.length) ? routes.map((item) => (
-    <Route
-      key={item.path}
-      path={item.path}
-      component={item.component}
-      exact={item.exact}
-    >
-      { renderRoutes(item.children) }
-    </Route>
-  )) : null;
-}
+import Index from './views/index';
+import Login from './views/login';
+import Register from './views/register';
+import Pay from './views/pay';
+import RecordList from './views/record-list';
+import RecordDetail from './views/record-detail';
+
 function App() {
   return (
-    <Router history={createBrowserHistory()}>{ renderRoutes(routes) }</Router>
+    <Router history={createBrowserHistory()}>
+      <Route
+        path="/"
+        component={Index}
+        exact
+      />
+      <Route
+        path="/pay"
+        component={Pay}
+        exact
+      />
+      <Route
+        path="/record-list"
+        component={RecordList}
+        exact
+      />
+      <Route
+        path="/record-detail"
+        component={RecordDetail}
+        exact
+      />
+      <Route
+        path="/login"
+        component={Login}
+        exact
+      />
+      <Route
+        path="/register"
+        component={Register}
+        exact
+      />
+      <Route
+        path="*"
+        redirect="/"
+      />
+    </Router>
   );
 }
 

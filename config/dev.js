@@ -114,10 +114,11 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
   ],
   devServer: {
-    contentBase: baseConfig.distPath,
+    // contentBase: baseConfig.distPath,
     hot: true,
     inline: true,
-    openPage: 'board/',
+    open: true,
+    progress:true,
     historyApiFallback: true,
     port: 9001,
     host: '127.0.0.1',

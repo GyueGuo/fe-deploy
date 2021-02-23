@@ -4,10 +4,6 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
-    // mocha: true,
-    // jest: true,
-    // jasmine: true,
   },
   rules: {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
@@ -20,7 +16,4 @@ module.exports = {
     'flowtype',
     'import',
   ],
-  // settings: {
-  //   polyfills: ['fetch', 'promises', 'url'],
-  // },
 };

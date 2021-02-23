@@ -1,0 +1,80 @@
+.index-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+
+  .radar-wrap {
+    position: relative;
+    margin-top: 40px;
+    padding: 50%;
+    .circle-line {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      &:nth-child(1) {
+        width: 80%;
+        height: 80%;
+      }
+      &:nth-child(2) {
+        width: 60%;
+        height: 60%;
+      }
+      &:nth-child(3) {
+        width: 40%;
+        height: 40%;
+      }
+      &:nth-child(4) {
+        width: 20%;
+        height: 20%;
+      }
+    }
+    .strange-line {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      width: 1px;
+      height: 80%;
+      background-color: #fff;
+      &:nth-child(2) {
+        transform: rotate(30deg);
+      }
+      &:nth-child(3) {
+        transform: rotate(60deg);
+      }
+      &:nth-child(4) {
+        transform: rotate(90deg);
+      }
+      &:nth-child(5) {
+        transform: rotate(120deg);
+      }
+      &:nth-child(6) {
+        transform: rotate(150deg);
+      }
+    }
+  }
+  .btn-wrap {
+    position: absolute;
+    width: 60%;
+    left: 20%;
+    a {
+      display: block;
+      box-sizing: border-box;
+      line-height: 44px;
+      width: 100%;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 16px;
+      color: #fff;
+      &:first-child {
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
