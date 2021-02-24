@@ -18,12 +18,12 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.json', '.jsx'],
   },
-  externals: {
-    React: 'react',
-    Redux: 'redux',
-    ReactDom: 'react-dom',
-    ReactRouter: 'react-router',
-  },
+  // externals: {
+  //   React: 'react',
+  //   Redux: 'redux',
+  //   ReactDom: 'react-dom',
+  //   ReactRouter: 'react-router',
+  // },
   module: {
     rules: [
       {

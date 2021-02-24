@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDom from 'react-dom';
 import { Router, Route } from 'react-router';
 import { createBrowserHistory } from 'history';
@@ -11,6 +11,11 @@ import RecordList from './views/record-list';
 import RecordDetail from './views/record-detail';
 
 function App() {
+  useEffect(() => {
+    const $root = document.documentElement;
+    // eslint-disable-next-line no-mixed-operators
+    $root.style.fontSize = `${document.documentElement.getBoundingClientRect().width / 750 * 100}px`;
+  }, []);
   return (
     <Router history={createBrowserHistory()}>
       <Route
