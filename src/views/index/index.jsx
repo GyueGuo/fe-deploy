@@ -14,6 +14,9 @@ function Index() {
   return (
     <div className="index-wrap">
       <div className="radar-wrap">
+        <div className="data-line2">1234567890</div>
+        <div className="data-line3">1234567890</div>
+        <div className="data-line4">1234567890</div>
         <div>
           <span className="circle-line" />
           <span className="circle-line" />

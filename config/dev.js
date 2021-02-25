@@ -36,11 +36,6 @@ module.exports = {
               presets: ['@babel/preset-env', '@babel/preset-react'],
               plugins: [
                 '@babel/plugin-proposal-class-properties',
-                ['import', {
-                  libraryName: 'antd',
-                  libraryDirectory: 'lib',
-                  style: 'css',
-                }],
               ],
               cacheDirectory: true,
             },

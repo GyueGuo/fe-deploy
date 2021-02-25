@@ -8,6 +8,7 @@ module.exports = {
   rules: {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'jsx-a11y/click-events-have-key-events': [0],
   },
   plugins: [
     'react-hooks',

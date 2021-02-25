@@ -10,6 +10,8 @@ import Pay from './views/pay';
 import RecordList from './views/record-list';
 import RecordDetail from './views/record-detail';
 
+import './app.less';
+
 function App() {
   useEffect(() => {
     const $root = document.documentElement;

@@ -1,5 +1,53 @@
 .record-list-wrap {
   .record-item {
-    
+    display: flex;
+    align-items: flex-start;
+    padding: 0.24rem 0.24rem 0;
+    .record-item-img {
+      flex-shrink: 0;
+      margin-right: 0.4rem;
+      border: 1px solid #eee;
+      border-radius: 0.08rem;
+      overflow: hidden;
+      img {
+        display: block;
+        width: 0.88rem;
+        height: 0.88rem;
+      }
+    }
+    dl {
+      width: 0;
+      padding-bottom: 0.24rem;
+      flex-grow: 1;
+      border-bottom: 1px solid #eee;
+      color: #999;
+      dt {
+        margin-top: -0.08rem;
+        display: flex;
+        align-items: center;
+        line-height: 0.56rem;
+        .record-item-name {
+          width: 0;
+          flex-grow: 1;
+          margin-right: 0.4rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 0.32rem;
+          color: #333;
+        }
+        .record-item-date {
+          font-size: 0.2rem;
+          flex-shrink: 0;
+        }
+      }
+      dd {
+        line-height: 0.4rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.24rem;
+      }
+    }
   }
 }
