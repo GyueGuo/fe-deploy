@@ -1,44 +1,59 @@
-import React, { useCallback, useMemo, useState } from 'react';
-// import axios from 'axios';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import './index.less';
 
-function Register() {
-  const [username, setUsername] = useState('');
-  const [pwd, setPwd] = useState('');
-  const [repeatPwd, setRepeatPwd] = useState('');
-  const handleRegister = useCallback(() => {
+function RecordDetail() {
+  const [list, setList] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
+  const history = useHistory();
+  const handleBack = useCallback(() => {
+    history.goBack();
+  }, []);
+  const renderMsg = useCallback((item) => {
+    if (item.msg) {
+      return (
+        <dl key={item.id}>
+          <dt>
+            <img src={userInfo.img} alt=""/>
+          </dt>
+          <dd>
+            <i />
+            {item.msg || 'sadadjajdlajldjaldjlkajkldjalkjdla'}
+          </dd>
+        </dl>
+      );
+    }
+    return (
+      <div className="msg-date">2020年 12月 1日</div>
+    );
+  }, [userInfo]);
+  useEffect(() => {
+    setList([{}, {}]);
+    setUserInfo('');
+  }, [setList]);
 
-  }, []);
-  const handleUsernameInput = useCallback((e) => {
-    setUsername(e.target.value.trim());
-  }, []);
-  const handlePwdInput = useCallback((e) => {
-    setPwd(e.target.value.trim());
-  }, []);
-  const handleRepeatPwdInput = useCallback((e) => {
-    setRepeatPwd(e.target.value.trim());
-  }, []);
-  const isBtnDisabled = useMemo(() => (
-    !username || !pwd || !repeatPwd
-  ), [username, pwd, repeatPwd]);
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll, false);
+  // }, []);
 
   return (
-    <div className="form-wrap">
-      <div className="form-item">
-        <input value={username} placeholder="请输入用户名" onInput={handleUsernameInput} />
+    <div className="record-detail-wrap">
+      <div className="user-wrap">
+        <a href="javascript:;" onClick={handleBack} />
+        <span>
+          {userInfo.name || '哈哈哈哈'}
+        </span>
       </div>
-      <div className="form-item">
-        <input value={pwd} placeholder="请输入密码" onInput={handlePwdInput} />
-      </div>
-      <div className="form-item">
-        <input value={repeatPwd} placeholder="请再次输入密码" onInput={handleRepeatPwdInput} />
-      </div>
-      <button className="form-submit" type="button" disabled={isBtnDisabled} onClick={handleRegister}>注册</button>
-      <div className="form-entries-wrap">
-        <a href="/login">去登录</a>
+      <div className="msg-wrap">
+        <div className="msg-list">
+          {
+            list.map(renderMsg)
+          }
+        </div>
       </div>
     </div>
   );
 }
 
-export default Register;
+export default RecordDetail;
