@@ -6,7 +6,7 @@ import { createBrowserHistory } from 'history';
 import Index from './views/index';
 import Login from './views/login';
 import Register from './views/register';
-import Pay from './views/pay';
+import Payment from './views/payment';
 import RecordList from './views/record-list';
 import RecordDetail from './views/record-detail';
 
@@ -27,7 +27,7 @@ function App() {
       />
       <Route
         path="/pay"
-        component={Pay}
+        component={Payment}
         exact
       />
       <Route
