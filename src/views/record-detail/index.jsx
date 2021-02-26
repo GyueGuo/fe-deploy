@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import classnames from 'classnames';
 
 import './index.less';
 
@@ -13,15 +14,23 @@ function RecordDetail() {
   const renderMsg = useCallback((item) => {
     if (item.msg) {
       return (
-        <dl key={item.id}>
-          <dt>
-            <img src={userInfo.img} alt=""/>
-          </dt>
-          <dd>
-            <i />
-            {item.msg || 'sadadjajdlajldjaldjlkajkldjalkjdla'}
-          </dd>
-        </dl>
+        <div
+          className={
+            classnames({
+              'msg-item': true,
+              'sent-by-myselft': item.sentByMe,
+            })
+          }
+        >
+          <dl key={item.id}>
+            <dt>
+              <img src={userInfo.img} alt="" />
+            </dt>
+            <dd>
+              <p>{item.msg}</p>
+            </dd>
+          </dl>
+        </div>
       );
     }
     return (
@@ -29,7 +38,7 @@ function RecordDetail() {
     );
   }, [userInfo]);
   useEffect(() => {
-    setList([{}, {}]);
+    setList([{}, { msg: 'sadadjajdlajldjaldjlkajkldjalkjdla sadadjajdlajldjaldjlkajkldjalkjdla sadadjajdlajldjaldjlkajkldjalkjdla', sentByMe: 1 }, {}, { msg: '2' }]);
     setUserInfo('');
   }, [setList]);
 
@@ -40,7 +49,7 @@ function RecordDetail() {
   return (
     <div className="record-detail-wrap">
       <div className="user-wrap">
-        <a href="javascript:;" onClick={handleBack} />
+        <a href="javascript:;" onClick={handleBack} role="button">&lt;</a>
         <span>
           {userInfo.name || '哈哈哈哈'}
         </span>
