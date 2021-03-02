@@ -36,6 +36,7 @@ module.exports = {
               presets: ['@babel/preset-env', '@babel/preset-react'],
               plugins: [
                 '@babel/plugin-proposal-class-properties',
+                ['import', { libraryName: 'antd-mobile', style: 'css' }],
               ],
               cacheDirectory: true,
             },
@@ -113,7 +114,7 @@ module.exports = {
     hot: true,
     inline: true,
     open: true,
-    progress:true,
+    progress: true,
     historyApiFallback: true,
     port: 9001,
     host: '127.0.0.1',
