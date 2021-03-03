@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-script-url */
 // eslint-disable react/style-prop-object
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import './index.less';
+import draw from './draw';
 
 function Index() {
   const handleFindBack = useCallback(() => {
@@ -11,12 +12,21 @@ function Index() {
   const handleViewView = useCallback(() => {
 
   }, []);
+  useEffect(() => {
+    const $can = document.querySelector('canvas');
+    const { width, height } = $can.getBoundingClientRect();
+    $can.width = width;
+    $can.height = height;
+    const that = draw();
+    // 创建代码雨
+    that.createCodeRain();
+    // 开始下雨吧 GO>>
+    requestAnimationFrame(that.codeRaining);
+  }, []);
   return (
     <div className="index-wrap">
+      <canvas id="cvs" />
       <div className="radar-wrap">
-        <div className="data-line2">1234567890</div>
-        <div className="data-line3">1234567890</div>
-        <div className="data-line4">1234567890</div>
         <div>
           <span className="circle-line" />
           <span className="circle-line" />
@@ -33,15 +43,6 @@ function Index() {
           <div className="strange-line" />
         </div>
         <div className="scan-line" />
-        <div className="city-point beijing" />
-        <div className="city-point shanghai" />
-        <div className="city-point xian" />
-        <div className="city-point wuhan" />
-        <div className="city-point chengdu" />
-        <div className="city-point guangzhou" />
-        <div className="city-point haerbin" />
-        <div className="city-point wulumuqi" />
-        <div className="city-point lasa" />
       </div>
       <div className="btn-wrap" style={{ dispaly: 'none' }}>
         <a href="javascript:;" onClick={handleFindBack}>找回</a>
