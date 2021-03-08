@@ -9,6 +9,7 @@ import Register from './views/register';
 import Payment from './views/payment';
 import RecordList from './views/record-list';
 import RecordDetail from './views/record-detail';
+import Agreement from './views/agreement';
 
 import './app.less';
 
@@ -48,6 +49,11 @@ function App() {
       <Route
         path="/register"
         component={Register}
+        exact
+      />
+      <Route
+        path="/agreement"
+        component={Agreement}
         exact
       />
       <Route

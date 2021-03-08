@@ -1,17 +1,15 @@
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
-import {
-  Picker, List,
-} from 'antd-mobile';
+import { Icon } from 'antd-mobile';
 import '../register/index.less';
 import './index.less';
 
 function Payment() {
   const [wx, setWx] = useState('');
   const [periodList, setPeriodList] = useState([]);
-  const [period, setPeriod] = useState([null]);
   const [isShowAction, setIsShowAction] = useState(false);
+  const price = useRef(10);
 
   const handleInputWx = useCallback((e) => {
     setWx(e.target.value.trim());
@@ -20,9 +18,6 @@ function Payment() {
     // if (wx && period) {
     setIsShowAction(true);
     // }
-  }, []);
-  const handlePeriodChange = useCallback((e) => {
-    setPeriod(e);
   }, []);
 
   const draw = useCallback(() => {
@@ -61,12 +56,18 @@ function Payment() {
     requestAnimationFrame(drawFn);
   }, []);
 
-  const isBtnDisabled = useMemo(() => (!wx || !period[0]), [wx, period]);
+  const getPriceShow = useCallback((value) => (
+    `￥${(value * price.current).toFixed(2)}`
+  ), []);
+
+  const isBtnDisabled = useMemo(() => (!wx), [wx]);
+
   useEffect(() => {
     if (isShowAction) {
       draw();
     }
   }, [isShowAction, draw]);
+
   useEffect(() => {
     setPeriodList([{
       value: 1,
@@ -84,17 +85,18 @@ function Payment() {
       <div className="form-item">
         <input value={wx} placeholder="请输入微信号码" onInput={handleInputWx} />
       </div>
-      <div className="form-item">
-        <Picker
-          extra="请选择时间"
-          onChange={handlePeriodChange}
-          data={periodList}
-          cols={1}
-          value={period}
-        >
-          <List.Item arrow="horizontal"> </List.Item>
-        </Picker>
-      </div>
+      {
+        periodList.map((item) => (
+          <div className="form-item period-item" key={item.value}>
+            <span className="item-title">
+              查询记录，
+              { item.label }
+            </span>
+            <span className="item-price">{ getPriceShow(item.value) }</span>
+            <Icon className="item-icon" type="right" size="sm" />
+          </div>
+        ))
+      }
       <button className="form-submit" type="button" disabled={isBtnDisabled} onClick={handlePay}>支付</button>
       {
         isShowAction ? (
