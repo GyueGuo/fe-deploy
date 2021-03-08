@@ -8,6 +8,7 @@ import './index.less';
 function Payment() {
   const [wx, setWx] = useState('');
   const [periodList, setPeriodList] = useState([]);
+  const [period, setPeriod] = useState(null);
   const [isShowAction, setIsShowAction] = useState(false);
   const price = useRef(10);
 
@@ -60,7 +61,11 @@ function Payment() {
     `￥${(value * price.current).toFixed(2)}`
   ), []);
 
-  const isBtnDisabled = useMemo(() => (!wx), [wx]);
+  const handlePeriodClick = useCallback(({ value }) => (
+    setPeriod(value)
+  ), []);
+
+  const isBtnDisabled = useMemo(() => (!wx || period === null), [wx, period]);
 
   useEffect(() => {
     if (isShowAction) {
@@ -87,7 +92,13 @@ function Payment() {
       </div>
       {
         periodList.map((item) => (
-          <div className="form-item period-item" key={item.value}>
+          <div
+            className="form-item period-item"
+            key={item.value}
+            role="button"
+            tabIndex="0"
+            onClick={handlePeriodClick(item)}
+          >
             <span className="item-title">
               查询记录，
               { item.label }
