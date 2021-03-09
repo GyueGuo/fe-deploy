@@ -1,7 +1,9 @@
 import React, {
   useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
-import { Icon } from 'antd-mobile';
+import { Icon, Toast } from 'antd-mobile';
+import ajax from '../../utils/request';
+
 import '../register/index.less';
 import './index.less';
 
@@ -74,16 +76,19 @@ function Payment() {
   }, [isShowAction, draw]);
 
   useEffect(() => {
-    setPeriodList([{
-      value: 1,
-      label: '30天',
-    }, {
-      value: 2,
-      label: '3月内',
-    }, {
-      value: 3,
-      label: '1年内',
-    }]);
+    ajax({
+      url: '/wx/getPriceDic',
+    }).then((res) => {
+      if (res.code === 0) {
+        setPeriodList(res.result.map((item) => ({
+          id: item.id,
+          label: item.queryPrice,
+          value: item.queryName,
+        })));
+        return;
+      }
+      Toast.info(res.message);
+    });
   }, []);
   return (
     <div className="payment-wrap form-wrap">
@@ -94,7 +99,7 @@ function Payment() {
         periodList.map((item) => (
           <div
             className="form-item period-item"
-            key={item.value}
+            key={item.id}
             role="button"
             tabIndex="0"
             onClick={handlePeriodClick(item)}

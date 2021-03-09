@@ -1,12 +1,26 @@
 import React, { useCallback, useMemo, useState } from 'react';
-// import axios from 'axios';
+import { Toast } from 'antd-mobile';
+import ajax from '../../utils/request';
 import '../register/index.less';
 
 function Register() {
   const [username, setUsername] = useState('');
   const [pwd, setPwd] = useState('');
   const handleLogin = useCallback(() => {
-
+    ajax({
+      url: '/wx/login',
+      data: {
+        userName: username,
+        userPassord: pwd,
+      },
+    }).then((res) => {
+      if (res.code === 0) {
+        window.location.href = '/';
+        Toast.info(res.message);
+        return;
+      }
+      Toast.info(res.message);
+    });
   }, []);
   const handleUsernameInput = useCallback((e) => {
     setUsername(e.target.value.trim());

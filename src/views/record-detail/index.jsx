@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import classnames from 'classnames';
+import { Modal } from 'antd-mobile';
 
+import ajax from '../../utils/request';
 import './index.less';
 
 function RecordDetail() {
@@ -38,7 +40,22 @@ function RecordDetail() {
     );
   }, [userInfo]);
   useEffect(() => {
-    setList([{}, { msg: 'sadadjajdlajldjaldjlkajkldjalkjdla sadadjajdlajldjaldjlkajkldjalkjdla sadadjajdlajldjaldjlkajkldjalkjdla', sentByMe: 1 }, {}, { msg: '2' }]);
+    ajax({
+      url: '/wx/getTips',
+    }).then((res) => {
+      if (res.code === 0) {
+        const { result } = res;
+        Modal.alert('', result.tipsTitle, [
+          { text: '关闭' },
+          {
+            text: '确定',
+            onPress() {
+              window.location.href = result.tipsUrl;
+            },
+          },
+        ]);
+      }
+    });
     setUserInfo('');
   }, [setList]);
 
