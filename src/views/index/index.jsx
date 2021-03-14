@@ -2,16 +2,18 @@
 /* eslint-disable no-script-url */
 // eslint-disable react/style-prop-object
 import React, { useCallback, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import './index.less';
 import draw from './draw';
 
 function Index() {
+  const history = useHistory();
   const handleFindBack = useCallback(() => {
-
-  }, []);
-  const handleViewView = useCallback(() => {
-
-  }, []);
+    history.push('/pay');
+  }, [history]);
+  const handleViewVideo = useCallback(() => {
+    history.push('/video');
+  }, [history]);
   useEffect(() => {
     const $can = document.querySelector('canvas');
     const { width, height } = $can.getBoundingClientRect();
@@ -46,7 +48,7 @@ function Index() {
       </div>
       <div className="btn-wrap" style={{ dispaly: 'none' }}>
         <a href="javascript:;" onClick={handleFindBack}>找回</a>
-        <a href="javascript:;" onClick={handleViewView}>观看视频教程</a>
+        <a href="javascript:;" onClick={handleViewVideo}>观看视频教程</a>
       </div>
     </div>
   );

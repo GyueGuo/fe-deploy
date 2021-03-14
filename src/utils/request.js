@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const baseUrl = 'https://www.tongchengby.vip';
+console.log(process.env.NODE_ENV);
+const baseUrl = process.env.NODE_ENV === 'development' ? '/api/' : 'https://www.tongchengby.vip/';
 
 function ajax(options) {
   const opt = { method: 'post', ...options };
-  if (opt.url.startWith('/')) {
+  if (opt.url.startsWith('/')) {
     opt.url = `${baseUrl}${opt.url}`;
   }
   opt.headers = {

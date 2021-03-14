@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import { Icon, Toast } from 'antd-mobile';
 import ajax from '../../utils/request';
+import draw from './draw';
 
 import '../register/index.less';
 import './index.less';
@@ -18,53 +19,16 @@ function Payment() {
     setWx(e.target.value.trim());
   }, []);
   const handlePay = useCallback(() => {
-    // if (wx && period) {
-    setIsShowAction(true);
-    // }
-  }, []);
-
-  const draw = useCallback(() => {
-    const str = 'Thank you for using, we are trying to get the records from remote, please be patient and wait a few second';
-    const arr = str.split('');
-    let index = 0;
-    const max = arr.length;
-    let pointCounter = 0;
-    const drawPoint = () => {
-      const dom = document.querySelector('[data-selector="point"]');
-      let pstr = '';
-      let target = parseInt(pointCounter, 10);
-      while (target) {
-        pstr += '.';
-        target -= 1;
-      }
-      pointCounter += 0.1;
-      if (pointCounter > 5) {
-        pointCounter = 0;
-      }
-      dom.innerHTML = pstr;
-      requestAnimationFrame(drawPoint);
-    };
-    const drawFn = () => {
-      const dom = document.querySelector('[data-selector="modal"]');
-      if (dom) {
-        dom.innerHTML = arr.slice(0, index).join('');
-        index += 1;
-        if (index > max) {
-          requestAnimationFrame(drawPoint);
-          return;
-        }
-      }
-      requestAnimationFrame(drawFn);
-    };
-    requestAnimationFrame(drawFn);
-  }, []);
-
+    if (wx && period !== null) {
+      setIsShowAction(true);
+    }
+  }, [wx, period]);
   const getPriceShow = useCallback((value) => (
     `￥${(value * price.current).toFixed(2)}`
   ), []);
 
-  const handlePeriodClick = useCallback(({ value }) => (
-    setPeriod(value)
+  const handlePeriodClick = useCallback(({ id }) => (
+    setPeriod(id)
   ), []);
 
   const isBtnDisabled = useMemo(() => (!wx || period === null), [wx, period]);
@@ -73,21 +37,24 @@ function Payment() {
     if (isShowAction) {
       draw();
     }
-  }, [isShowAction, draw]);
+  }, [isShowAction]);
 
   useEffect(() => {
     ajax({
       url: '/wx/getPriceDic',
-    }).then((res) => {
-      if (res.code === 0) {
-        setPeriodList(res.result.map((item) => ({
+      headers: {
+        token: sessionStorage.getItem('token') || '',
+      },
+    }).then(({ data }) => {
+      if (data.code === 0) {
+        setPeriodList(data.result.map((item) => ({
           id: item.id,
-          label: item.queryPrice,
-          value: item.queryName,
+          label: item.queryName,
+          value: item.queryPrice,
         })));
         return;
       }
-      Toast.info(res.message);
+      Toast.info(data.message);
     });
   }, []);
   return (
@@ -102,14 +69,14 @@ function Payment() {
             key={item.id}
             role="button"
             tabIndex="0"
-            onClick={handlePeriodClick(item)}
+            onClick={() => handlePeriodClick(item)}
           >
             <span className="item-title">
               查询记录，
               { item.label }
             </span>
             <span className="item-price">{ getPriceShow(item.value) }</span>
-            <Icon className="item-icon" type="right" size="sm" />
+            <Icon className="item-icon" type={item.id === period ? 'check' : 'radio'} size="sm" />
           </div>
         ))
       }
