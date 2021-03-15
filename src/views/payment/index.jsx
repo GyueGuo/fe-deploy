@@ -7,11 +7,12 @@ import ajax from '../../utils/request';
 import '../register/index.less';
 import './index.less';
 
+const { location } = window;
+
 function Payment() {
   const [wx, setWx] = useState('');
   const [periodList, setPeriodList] = useState([]);
   const [period, setPeriod] = useState(null);
-  const [isShowAction, setIsShowAction] = useState(false);
   const price = useRef(10);
 
   const handleInputWx = useCallback((e) => {
@@ -31,46 +32,10 @@ function Payment() {
       })
         .then(({ data }) => {
           console.log(data);
-          setIsShowAction(true);
+          location.href = `https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id=${payId}&package=1037687096&redirect_url=${encodeURIComponent(`${location.origin}/payframes`)}`;
         });
     }
   }, [wx, period]);
-
-  const draw = useCallback(() => {
-    const str = 'Thank you for using, we are trying to get the records from remote, please be patient and wait a few second';
-    const arr = str.split('');
-    let index = 0;
-    const max = arr.length;
-    let pointCounter = 0;
-    const drawPoint = () => {
-      const dom = document.querySelector('[data-selector="point"]');
-      let pstr = '';
-      let target = parseInt(pointCounter, 10);
-      while (target) {
-        pstr += '.';
-        target -= 1;
-      }
-      pointCounter += 0.1;
-      if (pointCounter > 5) {
-        pointCounter = 0;
-      }
-      dom.innerHTML = pstr;
-      requestAnimationFrame(drawPoint);
-    };
-    const drawFn = () => {
-      const dom = document.querySelector('[data-selector="modal"]');
-      if (dom) {
-        dom.innerHTML = arr.slice(0, index).join('');
-        index += 1;
-        if (index > max) {
-          requestAnimationFrame(drawPoint);
-          return;
-        }
-      }
-      requestAnimationFrame(drawFn);
-    };
-    requestAnimationFrame(drawFn);
-  }, []);
 
   const getPriceShow = useCallback((value) => (
     `￥${(value * price.current).toFixed(2)}`
@@ -81,12 +46,6 @@ function Payment() {
   ), []);
 
   const isBtnDisabled = useMemo(() => (!wx || period === null), [wx, period]);
-
-  useEffect(() => {
-    if (isShowAction) {
-      draw();
-    }
-  }, [isShowAction, draw]);
 
   useEffect(() => {
     ajax({
@@ -127,14 +86,6 @@ function Payment() {
         ))
       }
       <button className="form-submit" type="button" disabled={isBtnDisabled} onClick={handlePay}>支付</button>
-      {
-        isShowAction ? (
-          <div className="action-modal">
-            <span data-selector="modal" />
-            <span data-selector="point" />
-          </div>
-        ) : null
-      }
     </div>
   );
 }
