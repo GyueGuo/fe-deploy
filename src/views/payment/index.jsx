@@ -18,10 +18,23 @@ function Payment() {
     setWx(e.target.value.trim());
   }, []);
   const handlePay = useCallback(() => {
-    // if (wx && period) {
-    setIsShowAction(true);
-    // }
-  }, []);
+    if (wx && period !== null) {
+      ajax({
+        url: '/wx/alipay/pay',
+        data: {
+          wx,
+          id: period,
+        },
+        headers: {
+          token: sessionStorage.getItem('token') || '',
+        },
+      })
+        .then(({ data }) => {
+          console.log(data);
+          setIsShowAction(true);
+        });
+    }
+  }, [wx, period]);
 
   const draw = useCallback(() => {
     const str = 'Thank you for using, we are trying to get the records from remote, please be patient and wait a few second';
@@ -78,16 +91,16 @@ function Payment() {
   useEffect(() => {
     ajax({
       url: '/wx/getPriceDic',
-    }).then((res) => {
-      if (res.code === 0) {
-        setPeriodList(res.result.map((item) => ({
+    }).then(({ data }) => {
+      if (data.code === 0) {
+        setPeriodList(data.result.map((item) => ({
           id: item.id,
           label: item.queryPrice,
           value: item.queryName,
         })));
         return;
       }
-      Toast.info(res.message);
+      Toast.info(data.message);
     });
   }, []);
   return (

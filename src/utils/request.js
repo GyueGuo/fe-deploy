@@ -4,7 +4,7 @@ const baseUrl = 'https://www.tongchengby.vip';
 
 function ajax(options) {
   const opt = { method: 'post', ...options };
-  if (opt.url.startWith('/')) {
+  if (opt.url.startsWith('/')) {
     opt.url = `${baseUrl}${opt.url}`;
   }
   opt.headers = {

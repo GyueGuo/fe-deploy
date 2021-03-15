@@ -13,13 +13,14 @@ function Register() {
         userName: username,
         userPassord: pwd,
       },
-    }).then((res) => {
-      if (res.code === 0) {
+    }).then(({ data, headers }) => {
+      if (data.code === 0) {
+        sessionStorage.setItem('token', headers.token);
+        Toast.info(data.message);
         window.location.href = '/';
-        Toast.info(res.message);
         return;
       }
-      Toast.info(res.message);
+      Toast.info(data.message);
     });
   }, []);
   const handleUsernameInput = useCallback((e) => {
