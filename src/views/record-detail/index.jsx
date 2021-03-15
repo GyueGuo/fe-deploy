@@ -42,9 +42,9 @@ function RecordDetail() {
   useEffect(() => {
     ajax({
       url: '/wx/getTips',
-    }).then((res) => {
-      if (res.code === 0) {
-        const { result } = res;
+    }).then(({ data }) => {
+      if (data.code === 0) {
+        const { result } = data;
         Modal.alert('', result.tipsTitle, [
           { text: '关闭' },
           {
