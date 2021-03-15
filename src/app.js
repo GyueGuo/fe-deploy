@@ -10,6 +10,7 @@ import Payment from './views/payment';
 import RecordList from './views/record-list';
 import RecordDetail from './views/record-detail';
 import Agreement from './views/agreement';
+import PayFrames from './views/pay-frames';
 
 import './app.less';
 
@@ -54,6 +55,11 @@ function App() {
       <Route
         path="/agreement"
         component={Agreement}
+        exact
+      />
+      <Route
+        path="/pay-frames"
+        component={PayFrames}
         exact
       />
       <Route
