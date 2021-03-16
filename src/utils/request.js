@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 console.log(process.env.NODE_ENV);
-const baseUrl = process.env.NODE_ENV === 'development' ? '/api/' : 'https://www.tongchengby.vip/';
+const baseUrl = process.env.NODE_ENV === 'development' ? '/api' : 'http://www.tongchengby.vip';
 
 function ajax(options) {
   const opt = { method: 'post', ...options };

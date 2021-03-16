@@ -16,10 +16,6 @@ function RecordList() {
     setList([{}, {}]);
   }, [setList]);
 
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll, false);
-  // }, []);
-
   return (
     <div className="record-list-wrap">
       {

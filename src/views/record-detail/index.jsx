@@ -39,6 +39,7 @@ function RecordDetail() {
       <div className="msg-date">2020年 12月 1日</div>
     );
   }, [userInfo]);
+
   useEffect(() => {
     ajax({
       url: '/wx/getTips',
@@ -56,12 +57,7 @@ function RecordDetail() {
         ]);
       }
     });
-    setUserInfo('');
-  }, [setList]);
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll, false);
-  // }, []);
+  }, []);
 
   return (
     <div className="record-detail-wrap">

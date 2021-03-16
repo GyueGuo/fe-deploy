@@ -1,16 +1,17 @@
 import React, {
   useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Icon, Toast } from 'antd-mobile';
+import classnames from 'classnames';
+
 import ajax from '../../utils/request';
-import draw from './draw';
 
 import '../register/index.less';
 import './index.less';
 
-const { location } = window;
-
 function Payment() {
+  const history = useHistory();
   const [wx, setWx] = useState('');
   const [periodList, setPeriodList] = useState([]);
   const [period, setPeriod] = useState(null);
@@ -21,19 +22,20 @@ function Payment() {
   }, []);
   const handlePay = useCallback(() => {
     if (wx && period !== null) {
+      const token = sessionStorage.getItem('token') || '';
       ajax({
         url: '/wx/alipay/pay',
         data: {
-          wx,
           id: period,
         },
         headers: {
-          token: sessionStorage.getItem('token') || '',
+          token,
         },
       })
         .then(({ data }) => {
-          console.log(data);
-          location.href = `https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id=${payId}&package=1037687096&redirect_url=${encodeURIComponent(`${location.origin}/payframes`)}`;
+          document.open();
+          document.write(data);
+          document.close();
         });
     }
   }, [wx, period]);
@@ -49,20 +51,32 @@ function Payment() {
   const isBtnDisabled = useMemo(() => (!wx || period === null), [wx, period]);
 
   useEffect(() => {
+    const token = sessionStorage.getItem('token') || '';
+    if (!token) {
+      Toast.info('请先登录');
+      history.push('/login');
+      return;
+    }
     ajax({
       url: '/wx/getPriceDic',
+      headers: {
+        token,
+      },
     }).then(({ data }) => {
       if (data.code === 0) {
-        setPeriodList(data.result.map((item) => ({
+        const list = data.result.map((item) => ({
           id: item.id,
           label: item.queryName,
           value: item.queryPrice,
-        })));
+        }));
+        setPeriodList(list);
+        setPeriod(list[0].id);
         return;
       }
       Toast.info(data.message);
     });
   }, []);
+
   return (
     <div className="payment-wrap form-wrap">
       <div className="form-item">
@@ -71,7 +85,13 @@ function Payment() {
       {
         periodList.map((item) => (
           <div
-            className="form-item period-item"
+            className={
+              classnames({
+                'form-item': true,
+                'period-item': true,
+                active: item.id === period,
+              })
+            }
             key={item.id}
             role="button"
             tabIndex="0"
@@ -87,7 +107,7 @@ function Payment() {
         ))
       }
       <button className="form-submit" type="button" disabled={isBtnDisabled} onClick={handlePay}>支付</button>
-     </div>
+    </div>
   );
 }
 

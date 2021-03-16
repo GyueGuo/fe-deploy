@@ -1,98 +1,105 @@
-const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const getEntries = require("./lib/getEntries");
-const baseConfig = require("./lib/baseConfig");
-
-const entry = {};
-getEntries().forEach(function (item) {
-  entry[item.replace(baseConfig.pagePath, "").replace(/\.js$/, "")] = item;
-});
+const path = require('path');
+const webpack = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const baseConfig = require('./lib/baseConfig');
 
 module.exports = {
-  entry,
+  entry: baseConfig.entry,
   output: {
-    filename: "js/[name].js",
+    filename: 'js/[name].js',
     path: baseConfig.distPath,
-    publicPath: "//static.demo.com/v1/"
+    publicPath: '/',
   },
-  mode: "production",
+  mode: 'production',
+  devtool: 'none',
+  resolve: {
+    extensions: ['.js', '.json', '.jsx'],
+  },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
+        include: baseConfig.srcPath,
         use: [
           {
-            loader: "babel-loader",
+            loader: 'babel-loader',
             options: {
-              presets: ["@babel/preset-env"],
-              cacheDirectory: true
-            }
+              presets: ['@babel/preset-env', '@babel/preset-react'],
+              plugins: [
+                '@babel/plugin-proposal-class-properties',
+                ['import', { libraryName: 'antd-mobile', style: 'css' }],
+              ],
+              cacheDirectory: true,
+            },
           },
           {
-            loader: "eslint-loader"
-          }
-        ]
+            loader: 'eslint-loader',
+          },
+        ],
       },
       {
         test: /\.css$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader
+            loader: 'style-loader',
           },
           {
-            loader: "css-loader"
+            loader: 'css-loader',
           },
           {
-            loader: "postcss-loader"
-          }
-        ]
+            loader: 'postcss-loader',
+          },
+        ],
       },
       {
         test: /\.less$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader
+            loader: 'style-loader',
           },
           {
-            loader: "css-loader",
-            options: {}
+            loader: 'css-loader',
           },
           {
-            loader: "less-loader",
-            options: {}
+            loader: 'postcss-loader',
           },
           {
-            loader: "postcss-loader"
-          }
-        ]
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpg|jpeg|gif)$/,
         use: [
           {
-            loader: "file-loader",
+            loader: 'file-loader',
             options: {
               context: baseConfig.pagePath,
-              name: "[path][name].[ext]", // 设置抽离打包图片的名称--[ext]用来获取图片的后缀
-              outputPath: "images" // 设置输出文件夹名称，这个文件夹会与主入口文件在同一路径下
-            }
-          }
-        ]
-      }
-    ]
-  },
-  optimization: {
-    minimizer: [new UglifyJsPlugin()],
+              name: '[path][name].[ext]', // 设置抽离打包图片的名称--[ext]用来获取图片的后缀
+              outputPath: 'images', // 设置输出文件夹名称，这个文件夹会与主入口文件在同一路径下
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: "css/[name].css",
-      chunkFilename: "[id].css"
+      filename: 'css/[name].css',
+      chunkFilename: '[id].css',
     }),
-    new OptimizeCSSAssetsPlugin({})
-  ]
+    new HtmlWebpackPlugin({
+      template: path.join(baseConfig.srcPath, 'index.html'),
+      inject: true,
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+  ],
 };
