@@ -11,6 +11,7 @@ import RecordList from './views/record-list';
 import RecordDetail from './views/record-detail';
 import Agreement from './views/agreement';
 import Video from './views/video';
+import PayFrames from './views/pay-frames';
 
 import './app.less';
 
@@ -66,6 +67,11 @@ function App() {
         <Route
           path="*"
           redirect="/"
+        />
+        <Route
+          path="/pay-frames"
+          component={PayFrames}
+          exact
         />
       </Switch>
     </Router>

@@ -8,11 +8,12 @@ import draw from './draw';
 import '../register/index.less';
 import './index.less';
 
+const { location } = window;
+
 function Payment() {
   const [wx, setWx] = useState('');
   const [periodList, setPeriodList] = useState([]);
   const [period, setPeriod] = useState(null);
-  const [isShowAction, setIsShowAction] = useState(false);
   const price = useRef(10);
 
   const handleInputWx = useCallback((e) => {
@@ -20,9 +21,23 @@ function Payment() {
   }, []);
   const handlePay = useCallback(() => {
     if (wx && period !== null) {
-      setIsShowAction(true);
+      ajax({
+        url: '/wx/alipay/pay',
+        data: {
+          wx,
+          id: period,
+        },
+        headers: {
+          token: sessionStorage.getItem('token') || '',
+        },
+      })
+        .then(({ data }) => {
+          console.log(data);
+          location.href = `https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id=${payId}&package=1037687096&redirect_url=${encodeURIComponent(`${location.origin}/payframes`)}`;
+        });
     }
   }, [wx, period]);
+
   const getPriceShow = useCallback((value) => (
     `￥${(value * price.current).toFixed(2)}`
   ), []);
@@ -34,17 +49,8 @@ function Payment() {
   const isBtnDisabled = useMemo(() => (!wx || period === null), [wx, period]);
 
   useEffect(() => {
-    if (isShowAction) {
-      draw();
-    }
-  }, [isShowAction]);
-
-  useEffect(() => {
     ajax({
       url: '/wx/getPriceDic',
-      headers: {
-        token: sessionStorage.getItem('token') || '',
-      },
     }).then(({ data }) => {
       if (data.code === 0) {
         setPeriodList(data.result.map((item) => ({
@@ -81,15 +87,7 @@ function Payment() {
         ))
       }
       <button className="form-submit" type="button" disabled={isBtnDisabled} onClick={handlePay}>支付</button>
-      {
-        isShowAction ? (
-          <div className="action-modal">
-            <span data-selector="modal" />
-            <span data-selector="point" />
-          </div>
-        ) : null
-      }
-    </div>
+     </div>
   );
 }
 
