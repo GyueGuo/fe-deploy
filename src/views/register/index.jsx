@@ -1,13 +1,15 @@
 import React, {
-  useCallback, useMemo, useState,
+  useCallback, useMemo, useState, useContext,
 } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Toast } from 'antd-mobile';
 import ajax from '../../utils/request';
+import Context from '../../store/context';
 import './index.less';
 
 function Register() {
   const history = useHistory();
+  const context = useContext(Context);
   const [username, setUsername] = useState('');
   const [pwd, setPwd] = useState('');
   const [repeatPwd, setRepeatPwd] = useState('');
@@ -25,7 +27,10 @@ function Register() {
     }).then(({ data, headers }) => {
       if (data.code === 0) {
         Toast.info('注册成功');
-        sessionStorage.setItem('token', headers.token);
+        context.dispatch({
+          type: 'SET_TOKEN',
+          data: headers.token,
+        });
         history.push('/');
         return;
       }

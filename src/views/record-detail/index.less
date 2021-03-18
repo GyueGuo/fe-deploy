@@ -39,8 +39,10 @@
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       .msg-item {
-        padding: 0 0.32rem;
-        margin-bottom: 0.2rem;
+        padding: 0 0.32rem 0.32rem;
+        &:first-child {
+          padding-top: 0.32rem;
+        }
         &.sent-by-myselft {
           text-align: right;
 

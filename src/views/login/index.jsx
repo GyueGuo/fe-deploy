@@ -1,14 +1,17 @@
 import React, {
-  useCallback, useMemo, useState,
+  useCallback, useMemo, useState, useContext,
 } from 'react';
 import { Toast } from 'antd-mobile';
 import { useHistory } from 'react-router-dom';
 import ajax from '../../utils/request';
+import Context from '../../store/context';
 
 import '../register/index.less';
 
 function Login() {
   const history = useHistory();
+  const context = useContext(Context);
+
   const [username, setUsername] = useState('');
   const [pwd, setPwd] = useState('');
   const handleLogin = useCallback(() => {
@@ -21,7 +24,10 @@ function Login() {
     }).then(({ data, headers }) => {
       if (data.code === 0) {
         Toast.info('登录成功');
-        sessionStorage.setItem('token', headers.token);
+        context.dispatch({
+          type: 'SET_TOKEN',
+          data: headers.token,
+        });
         history.push('/');
         return;
       }
@@ -40,7 +46,6 @@ function Login() {
   const isBtnDisabled = useMemo(() => (
     !username || !pwd
   ), [username, pwd]);
-
   return (
     <div className="form-wrap">
       <div className="form-item">

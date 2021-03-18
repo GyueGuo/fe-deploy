@@ -1,10 +1,11 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState,
+  useCallback, useEffect, useMemo, useRef, useState, useContext,
 } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Icon, Toast } from 'antd-mobile';
 import classnames from 'classnames';
 
+import Context from '../../store/context';
 import ajax from '../../utils/request';
 
 import '../register/index.less';
@@ -12,6 +13,7 @@ import './index.less';
 
 function Payment() {
   const history = useHistory();
+  const context = useContext(Context);
   const [wx, setWx] = useState('');
   const [periodList, setPeriodList] = useState([]);
   const [period, setPeriod] = useState(null);
@@ -22,7 +24,7 @@ function Payment() {
   }, []);
   const handlePay = useCallback(() => {
     if (wx && period !== null) {
-      const token = sessionStorage.getItem('token') || '';
+      const { token } = context.state;
       ajax({
         url: '/wx/alipay/pay',
         data: {
@@ -51,12 +53,7 @@ function Payment() {
   const isBtnDisabled = useMemo(() => (!wx || period === null), [wx, period]);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token') || '';
-    if (!token) {
-      Toast.info('请先登录');
-      history.push('/login');
-      return;
-    }
+    const { token } = context.state;
     ajax({
       url: '/wx/getPriceDic',
       headers: {

@@ -1,42 +1,72 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState, useContext,
+} from 'react';
 import { useHistory } from 'react-router-dom';
+import { Toast } from 'antd-mobile';
+
+import Context from '../../store/context';
+import request from '../../utils/request';
+import draw from './draw';
 
 import './index.less';
 
 function RecordList() {
   const [list, setList] = useState([]);
+  const context = useContext(Context);
+  const $modal = useRef();
   const history = useHistory();
-  const handleViewDetail = useCallback(({ id }) => {
+  const handleViewDetail = useCallback((data) => {
     history.push('/record-detail', {
-      id,
+      data,
     });
   }, []);
 
   useEffect(() => {
-    setList([{}, {}]);
-  }, [setList]);
+    const cb = draw();
+    const { token } = context.state;
+    request({
+      url: '/wx/getChatRecord',
+      headers: {
+        token,
+      },
+    }).then(({ data }) => {
+      if (data.code === 0) {
+        setList(data.result);
+        return;
+      }
+      Toast.info(data.message);
+    });
+    return () => {
+      cb();
+    };
+  }, []);
 
   return (
     <div className="record-list-wrap">
+      <div className="action-modal" ref={$modal}>
+        <span data-selector="modal" />
+        <span data-selector="point" />
+      </div>
       {
         list.length ? (
-          list.map((item) => (
+          list.map((item, index) => (
             <div
               tabIndex="0"
               role="button"
-              key={item.id}
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
               className="record-item"
               onClick={() => handleViewDetail(item)}
             >
-              <div className="record-item-img">
+              {/* <div className="record-item-img">
                 <img src={item.img} alt="" />
-              </div>
+              </div> */}
               <dl>
                 <dt>
-                  <span className="record-item-name">{item.name || '11111111111111111'}</span>
-                  <span className="record-item-date">{item.date || '18：52'}</span>
+                  <span className="record-item-name">{item.name}</span>
+                  {/* <span className="record-item-date">{item.date || '18：52'}</span> */}
                 </dt>
-                <dd>{item.msg || '哈哈哈哈哈啊哈哈哈哈哈啊哈哈哈'}</dd>
+                <dd>{item.title}</dd>
               </dl>
             </div>
           ))

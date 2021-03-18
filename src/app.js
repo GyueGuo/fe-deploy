@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, {
+  useCallback, useEffect, useReducer, useRef,
+} from 'react';
 import ReactDom from 'react-dom';
-import { Router, Route, Switch } from 'react-router';
+import { Router, Route, Switch, browserHistory } from 'react-router';
 import { createBrowserHistory } from 'history';
 
 import Index from './views/index';
@@ -11,18 +13,37 @@ import RecordList from './views/record-list';
 import RecordDetail from './views/record-detail';
 import Agreement from './views/agreement';
 import Video from './views/video';
-import PayFrames from './views/pay-frames';
+
+import reducer from './store/reducer';
+import initStore from './store/store';
+import Context from './store/context';
 
 import './app.less';
 
+const { location } = window;
 function App() {
+  const [state, dispatch] = useReducer(
+    reducer,
+    initStore,
+  );
+  const history = useRef(createBrowserHistory());
+
+  const handleBeforeUnload = useCallback(() => {
+    if (state.token) {
+      sessionStorage.setItem('token', state.token);
+    }
+  }, [state.token]);
+
   useEffect(() => {
-    const $root = document.documentElement;
-    // eslint-disable-next-line no-mixed-operators
-    $root.style.fontSize = `${document.documentElement.getBoundingClientRect().width / 750 * 100}px`;
-  }, []);
-  return (
-    <Router history={createBrowserHistory()}>
+    if (!initStore.token && location.pathname !== '/login') {
+      history.current.replace('/login');
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => (window.removeEventListener('beforeunload', handleBeforeUnload));
+  }, [handleBeforeUnload]);
+
+  const routes = useRef((
+    <Router history={history.current}>
       <Switch>
         <Route
           path="/"
@@ -68,13 +89,18 @@ function App() {
           path="*"
           redirect="/"
         />
-        <Route
-          path="/pay-frames"
-          component={PayFrames}
-          exact
-        />
       </Switch>
     </Router>
+  ));
+  useEffect(() => {
+    const $root = document.documentElement;
+    // eslint-disable-next-line no-mixed-operators
+    $root.style.fontSize = `${document.documentElement.getBoundingClientRect().width / 750 * 100}px`;
+  }, []);
+  return (
+    <Context.Provider value={{ state, dispatch }}>
+      { routes.current }
+    </Context.Provider>
   );
 }
 
