@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useReducer, useRef,
 } from 'react';
 import ReactDom from 'react-dom';
-import { Router, Route, Switch, browserHistory } from 'react-router';
+import { Router, Route, Switch } from 'react-router';
 import { createBrowserHistory } from 'history';
 
 import Index from './views/index';

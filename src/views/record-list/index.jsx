@@ -12,6 +12,7 @@ import './index.less';
 
 function RecordList() {
   const [list, setList] = useState([]);
+  const [errText, setErrText] = useState('');
   const context = useContext(Context);
   const $modal = useRef();
   const history = useHistory();
@@ -20,10 +21,7 @@ function RecordList() {
       data,
     });
   }, []);
-
-  useEffect(() => {
-    const cb = draw();
-    const { token } = context.state;
+  const getList = useCallback((token) => (
     request({
       url: '/wx/getChatRecord',
       headers: {
@@ -31,20 +29,46 @@ function RecordList() {
       },
     }).then(({ data }) => {
       if (data.code === 0) {
-        setList(data.result);
+        if (data.result && data.result.length) {
+          setList(data.result);
+          context.dispatch({
+            type: 'SET_CHART_RECORD',
+            data: data.result,
+          });
+        } else {
+          setErrText('未找到历史消息');
+        }
         return;
       }
       Toast.info(data.message);
+    })
+  ), []);
+  useEffect(() => {
+    const { token, chartRecord } = context.state;
+    if (Array.isArray(chartRecord)) {
+      setList(chartRecord);
+      return null;
+    }
+    const cb = draw();
+    request({
+      url: '/wx/getPayResult',
+      headers: {
+        token,
+      },
+    }).then(({ data }) => {
+      if (data.code === 0) {
+        getList(token);
+        return;
+      }
+      setErrText(data.message);
     });
-    return () => {
-      cb();
-    };
+    return cb;
   }, []);
 
   return (
     <div className="record-list-wrap">
-      <div className="action-modal" ref={$modal}>
-        <span data-selector="modal" />
+      <div className="action-modal" data-selector="modal" ref={$modal}>
+        <span data-selector="str" />
         <span data-selector="point" />
       </div>
       {
@@ -71,7 +95,7 @@ function RecordList() {
             </div>
           ))
         ) : (
-          <div className="empty" />
+          <p>{ errText }</p>
         )
       }
     </div>
