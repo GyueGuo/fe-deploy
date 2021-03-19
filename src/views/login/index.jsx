@@ -4,6 +4,7 @@ import React, {
 import { Toast } from 'antd-mobile';
 import { useHistory } from 'react-router-dom';
 import ajax from '../../utils/request';
+import { telReg } from '../../utils/utils';
 import Context from '../../store/context';
 
 import '../register/index.less';
@@ -15,6 +16,14 @@ function Login() {
   const [username, setUsername] = useState('');
   const [pwd, setPwd] = useState('');
   const handleLogin = useCallback(() => {
+    if (!telReg.test(username)) {
+      Toast.info('请输入正确格式手机号');
+      return;
+    }
+    if (pwd.length < 6) {
+      Toast.info('密码长度至少6位');
+      return;
+    }
     ajax({
       url: '/wx/login',
       data: {
@@ -52,7 +61,7 @@ function Login() {
         <input
           autoComplete="off"
           value={username}
-          placeholder="请输入用户名"
+          placeholder="请输入手机号码"
           onInput={handleUsernameInput}
         />
       </div>

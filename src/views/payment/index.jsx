@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import Context from '../../store/context';
 import ajax from '../../utils/request';
-
+import { wxReg } from '../../utils/utils';
 import '../register/index.less';
 import './index.less';
 
@@ -22,6 +22,10 @@ function Payment() {
   }, []);
   const handlePay = useCallback(() => {
     if (wx && period !== null) {
+      if (!(wxReg).test(wx)) {
+        Toast.info('请输入正确格式的微信号');
+        return;
+      }
       const { token } = context.state;
       ajax({
         url: '/wx/alipay/pay',

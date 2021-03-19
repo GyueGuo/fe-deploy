@@ -4,6 +4,7 @@ import React, {
 import { useHistory } from 'react-router-dom';
 import { Toast } from 'antd-mobile';
 import ajax from '../../utils/request';
+import { telReg } from '../../utils/utils';
 import Context from '../../store/context';
 import './index.less';
 
@@ -14,8 +15,16 @@ function Register() {
   const [pwd, setPwd] = useState('');
   const [repeatPwd, setRepeatPwd] = useState('');
   const handleRegister = useCallback(() => {
+    if (!telReg.test(username)) {
+      Toast.info('请输入正确格式手机号');
+      return;
+    }
     if (repeatPwd !== pwd) {
       Toast.info('两次输入密码不一致');
+      return;
+    }
+    if (pwd.length < 6) {
+      Toast.info('密码长度至少6位');
       return;
     }
     ajax({
@@ -61,7 +70,7 @@ function Register() {
       <div className="form-item">
         <input
           value={username}
-          placeholder="请输入用户名"
+          placeholder="请输入手机号码"
           onInput={handleUsernameInput}
         />
       </div>
