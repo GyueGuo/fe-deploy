@@ -40,7 +40,9 @@ function Register() {
           type: 'SET_TOKEN',
           data: headers.token,
         });
-        history.push('/');
+        setTimeout(() => {
+          history.push('/');
+        });
         return;
       }
       Toast.info(data.message);

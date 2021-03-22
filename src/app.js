@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import ReactDom from 'react-dom';
 import { Router, Route, Switch } from 'react-router';
-import { createBrowserHistory } from 'history';
+import { createHashHistory } from 'history';
 
 import Index from './views/index';
 import Login from './views/login';
@@ -26,14 +26,13 @@ function App() {
     reducer,
     initStore,
   );
-  const history = useRef(createBrowserHistory());
+  const history = useRef(createHashHistory());
 
   const handleBeforeUnload = useCallback(() => {
     if (state.token) {
       sessionStorage.setItem('token', state.token);
     }
   }, [state.token]);
-
   useEffect(() => {
     if (!initStore.token && location.pathname !== '/login') {
       history.current.replace('/login');

@@ -32,12 +32,15 @@ function Login() {
       },
     }).then(({ data, headers }) => {
       if (data.code === 0) {
+        console.log(headers);
         Toast.info('登录成功');
         context.dispatch({
           type: 'SET_TOKEN',
           data: headers.token,
         });
-        history.push('/');
+        setTimeout(() => {
+          history.push('/');
+        });
         return;
       }
       Toast.info(data.message);

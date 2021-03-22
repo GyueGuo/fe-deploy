@@ -13,8 +13,8 @@ module.exports = {
     publicPath: '/',
     // publicPath: baseConfig.publicPath,
   },
-  mode: 'development',
-  devtool: 'cheap-source-map',
+  mode: 'production',
+  // devtool: 'cheap-source-map',
   resolve: {
     extensions: ['.js', '.json', '.jsx'],
   },
@@ -50,9 +50,6 @@ module.exports = {
         test: /\.css$/,
         use: [
           {
-            loader: 'style-loader',
-          },
-          {
             loader: 'css-loader',
           },
           {
@@ -63,9 +60,6 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          {
-            loader: 'style-loader',
-          },
           {
             loader: 'css-loader',
           },
@@ -107,23 +101,5 @@ module.exports = {
       template: path.join(baseConfig.srcPath, 'index.html'),
       inject: true,
     }),
-    new webpack.HotModuleReplacementPlugin(),
   ],
-  devServer: {
-    // contentBase: baseConfig.distPath,
-    hot: true,
-    inline: true,
-    open: true,
-    progress: true,
-    historyApiFallback: true,
-    port: 9001,
-    host: 'test.tongchengby.vip',
-    proxy: {
-      '/api': {
-        target: 'http://www.tongchengby.vip', // 代理地址，这里设置的地址会代替axios中设置的baseURL
-        pathRewrite: { '^/api': '' },
-        changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
-      },
-    },
-  },
 };
