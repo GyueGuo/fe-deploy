@@ -32,7 +32,6 @@ function Login() {
       },
     }).then(({ data, headers }) => {
       if (data.code === 0) {
-        console.log(headers);
         Toast.info('登录成功');
         context.dispatch({
           type: 'SET_TOKEN',
