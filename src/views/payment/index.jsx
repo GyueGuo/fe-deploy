@@ -1,17 +1,16 @@
 import React, {
-  useCallback, useEffect, useMemo, useRef, useState, useContext,
+  useCallback, useEffect, useMemo, useState,
 } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Icon, Toast } from 'antd-mobile';
 import classnames from 'classnames';
 
-import Context from '../../store/context';
 import ajax from '../../utils/request';
 import { wxReg } from '../../utils/utils';
-import '../register/index.less';
 import './index.less';
 
 function Payment() {
-  const context = useContext(Context);
+  const history = useHistory();
   const [wx, setWx] = useState('');
   const [periodList, setPeriodList] = useState([]);
   const [period, setPeriod] = useState(null);
@@ -25,14 +24,10 @@ function Payment() {
         Toast.info('请输入正确格式的微信号');
         return;
       }
-      const { token } = context.state;
       ajax({
         url: '/wx/alipay/pay',
         data: {
           id: period,
-        },
-        headers: {
-          token,
         },
       })
         .then(({ data }) => {
@@ -51,15 +46,14 @@ function Payment() {
     setPeriod(id)
   ), []);
 
+  const handleGoViewAgreement = useCallback(() => {
+    history.push('/agreement');
+  }, []);
   const isBtnDisabled = useMemo(() => (!wx || period === null), [wx, period]);
 
   useEffect(() => {
-    const { token } = context.state;
     ajax({
       url: '/wx/getPriceDic',
-      headers: {
-        token,
-      },
     }).then(({ data }) => {
       if (data.code === 0) {
         const list = data.result.map((item) => ({
@@ -76,7 +70,7 @@ function Payment() {
   }, []);
 
   return (
-    <div className="payment-wrap form-wrap">
+    <div className="payment-wrap">
       <div className="form-item">
         <input value={wx} placeholder="请输入微信号码" onInput={handleInputWx} />
       </div>
@@ -105,6 +99,7 @@ function Payment() {
         ))
       }
       <button className="form-submit" type="button" disabled={isBtnDisabled} onClick={handlePay}>支付</button>
+      <a href="javascript:;" className="agreement-link" onClick={handleGoViewAgreement}>《服务协议》</a>
     </div>
   );
 }

@@ -21,12 +21,9 @@ function RecordList() {
       data,
     });
   }, []);
-  const getList = useCallback((token) => (
+  const getList = useCallback(() => (
     request({
       url: '/wx/getChatRecord',
-      headers: {
-        token,
-      },
     }).then(({ data }) => {
       if (data.code === 0) {
         if (data.result && data.result.length) {
@@ -44,7 +41,7 @@ function RecordList() {
     })
   ), []);
   useEffect(() => {
-    const { token, chartRecord } = context.state;
+    const { chartRecord } = context.state;
     if (Array.isArray(chartRecord)) {
       setList(chartRecord);
       return null;
@@ -52,12 +49,9 @@ function RecordList() {
     const cb = draw();
     request({
       url: '/wx/getPayResult',
-      headers: {
-        token,
-      },
     }).then(({ data }) => {
       if (data.code === 0) {
-        getList(token);
+        getList();
         return;
       }
       setErrText(data.message);

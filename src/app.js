@@ -1,13 +1,12 @@
 import React, {
-  useCallback, useEffect, useReducer, useRef,
+  useEffect, useReducer, useRef,
 } from 'react';
 import ReactDom from 'react-dom';
 import { Router, Route, Switch } from 'react-router';
 import { createHashHistory } from 'history';
 
 import Index from './views/index';
-import Login from './views/login';
-import Register from './views/register';
+import PayError from './views/pay-error';
 import Payment from './views/payment';
 import RecordList from './views/record-list';
 import RecordDetail from './views/record-detail';
@@ -20,22 +19,14 @@ import Context from './store/context';
 
 import './app.less';
 
-const { location } = window;
 function App() {
   const [state, dispatch] = useReducer(
     reducer,
     initStore,
   );
-  const history = createHashHistory();
-
-  useEffect(() => {
-    if (!initStore.token && location.pathname !== '/login') {
-      history.replace('/login');
-    }
-  }, []);
 
   const routes = useRef((
-    <Router history={history}>
+    <Router history={createHashHistory()}>
       <Switch>
         <Route
           path="/"
@@ -58,13 +49,8 @@ function App() {
           exact
         />
         <Route
-          path="/login"
-          component={Login}
-          exact
-        />
-        <Route
-          path="/register"
-          component={Register}
+          path="/error"
+          component={PayError}
           exact
         />
         <Route
