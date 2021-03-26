@@ -1,4 +1,4 @@
 export default {
-  token: sessionStorage.getItem('token') || '',
+  token: (window.sessionStorage && sessionStorage.getItem('token')) || '',
   chartRecord: null,
 };

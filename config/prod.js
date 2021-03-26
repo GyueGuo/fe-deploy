@@ -34,17 +34,15 @@ module.exports = {
               cacheDirectory: true,
             },
           },
-          {
-            loader: 'eslint-loader',
-          },
+          // {
+          //   loader: 'eslint-loader',
+          // },
         ],
       },
       {
         test: /\.css$/,
         use: [
-          {
-            loader: 'style-loader',
-          },
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
           },
@@ -56,9 +54,7 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          {
-            loader: 'style-loader',
-          },
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
           },
@@ -100,6 +96,5 @@ module.exports = {
       template: path.join(baseConfig.srcPath, 'index.html'),
       inject: true,
     }),
-    new webpack.HotModuleReplacementPlugin(),
   ],
 };

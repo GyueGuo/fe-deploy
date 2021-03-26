@@ -15,7 +15,6 @@ function Payment() {
   const [wx, setWx] = useState('');
   const [periodList, setPeriodList] = useState([]);
   const [period, setPeriod] = useState(null);
-  const price = useRef(10);
 
   const handleInputWx = useCallback((e) => {
     setWx(e.target.value.trim());
@@ -45,7 +44,7 @@ function Payment() {
   }, [wx, period]);
 
   const getPriceShow = useCallback((value) => (
-    `￥${(value * price.current).toFixed(2)}`
+    `￥${value}元`
   ), []);
 
   const handlePeriodClick = useCallback(({ id }) => (

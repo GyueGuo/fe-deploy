@@ -26,23 +26,16 @@ function App() {
     reducer,
     initStore,
   );
-  const history = useRef(createHashHistory());
+  const history = createHashHistory();
 
-  const handleBeforeUnload = useCallback(() => {
-    if (state.token) {
-      sessionStorage.setItem('token', state.token);
-    }
-  }, [state.token]);
   useEffect(() => {
     if (!initStore.token && location.pathname !== '/login') {
-      history.current.replace('/login');
+      history.replace('/login');
     }
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => (window.removeEventListener('beforeunload', handleBeforeUnload));
-  }, [handleBeforeUnload]);
+  }, []);
 
   const routes = useRef((
-    <Router history={history.current}>
+    <Router history={history}>
       <Switch>
         <Route
           path="/"
