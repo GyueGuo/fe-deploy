@@ -19,9 +19,7 @@ function RecordDetail() {
       }
     >
       <dl key={item.id}>
-        {/* <dt>
-          <img src={userInfo.img} alt="" />
-        </dt> */}
+        <dt />
         <dd>
           <p>{item.content}</p>
         </dd>
@@ -30,9 +28,10 @@ function RecordDetail() {
   ), []);
 
   useEffect(() => {
+    console.log(location)
     const { data } = location.state;
     setList(data.data);
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     ajax({
@@ -40,12 +39,19 @@ function RecordDetail() {
     }).then(({ data }) => {
       if (data.code === 0) {
         const { result } = data;
-        Modal.alert('', result.tipsTitle, [
+        Modal.alert('', `${result.tipsTitle}\n${result.tipsUrl}`, [
           { text: '关闭' },
           {
-            text: '确定',
+            text: '复制链接',
             onPress() {
-              window.location.href = result.tipsUrl;
+              const input = document.createElement('input');
+              input.cssText = 'position: fixed; left: 0; top: 0; z-index: -99999;';
+              input.readyOnly = true;
+              input.value = result.tipsUrl;
+              document.body.appendChild(input);
+              input.select();
+              document.execCommand('copy');
+              document.body.removeChild(input);
             },
           },
         ]);

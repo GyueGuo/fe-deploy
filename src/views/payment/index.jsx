@@ -38,10 +38,6 @@ function Payment() {
     }
   }, [wx, period]);
 
-  const getPriceShow = useCallback((value) => (
-    `￥${value}元`
-  ), []);
-
   const handlePeriodClick = useCallback(({ id }) => (
     setPeriod(id)
   ), []);
@@ -89,11 +85,11 @@ function Payment() {
             tabIndex="0"
             onClick={() => handlePeriodClick(item)}
           >
-            <span className="item-title">
+            <span className="item-title">数据查询</span>
+            <span className="item-price">
               查询记录，
               { item.label }
             </span>
-            <span className="item-price">{ getPriceShow(item.value) }</span>
             <Icon className="item-icon" type={item.id === period ? 'check' : 'radio'} size="sm" />
           </div>
         ))

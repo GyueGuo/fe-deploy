@@ -17,8 +17,11 @@ function RecordList() {
   const $modal = useRef();
   const history = useHistory();
   const handleViewDetail = useCallback((data) => {
-    history.push('/record-detail', {
-      data,
+    history.push({
+      pathname: '/record-detail',
+      state: {
+        data,
+      },
     });
   }, []);
   const getList = useCallback(() => (
@@ -76,9 +79,7 @@ function RecordList() {
               className="record-item"
               onClick={() => handleViewDetail(item)}
             >
-              {/* <div className="record-item-img">
-                <img src={item.img} alt="" />
-              </div> */}
+              <div className="record-item-img" />
               <dl>
                 <dt>
                   <span className="record-item-name">{item.name}</span>
