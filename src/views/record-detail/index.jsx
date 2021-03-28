@@ -28,7 +28,6 @@ function RecordDetail() {
   ), []);
 
   useEffect(() => {
-    console.log(location)
     const { data } = location.state;
     setList(data.data);
   }, [location]);
@@ -39,22 +38,44 @@ function RecordDetail() {
     }).then(({ data }) => {
       if (data.code === 0) {
         const { result } = data;
-        Modal.alert('', `${result.tipsTitle}\n${result.tipsUrl}`, [
-          { text: '关闭' },
-          {
-            text: '复制链接',
-            onPress() {
-              const input = document.createElement('input');
-              input.cssText = 'position: fixed; left: 0; top: 0; z-index: -99999;';
-              input.readyOnly = true;
-              input.value = result.tipsUrl;
-              document.body.appendChild(input);
-              input.select();
-              document.execCommand('copy');
-              document.body.removeChild(input);
+        Modal.alert('',
+          (
+            <div>
+              <p>{result.tipsTitle}</p>
+              <input value={result.tipsUrl} readOnly className="clip-input" />
+            </div>
+          ),
+          [
+            { text: '关闭' },
+            {
+              text: '复制链接',
+              onPress() {
+                try {
+                  const input = document.createElement('input');
+                  input.cssText = 'position: fixed; left: 0; top: -200px; z-index: -99999;';
+                  input.readyOnly = true;
+                  input.value = result.tipsUrl;
+                  document.body.appendChild(input);
+                  input.focus();
+                  input.setSelectionRange(0, result.tipsUrl.length);
+                  document.execCommand('copy');
+                  document.body.removeChild(input);
+                } catch (e) {
+                  Modal.alert(
+                    '',
+                    (
+                      <div>
+                        <p>复制失败，请手动复制链接</p>
+                        <input value={result.tipsUrl} readOnly className="clip-input" />
+                      </div>
+                    ), [
+                      { text: '关闭' },
+                    ],
+                  );
+                }
+              },
             },
-          },
-        ]);
+          ]);
       }
     });
   }, []);

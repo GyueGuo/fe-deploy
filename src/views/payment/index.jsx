@@ -65,7 +65,7 @@ function Payment() {
     });
   }, []);
 
-  return (
+  return periodList.length ? (
     <div className="payment-wrap">
       <div className="form-item">
         <input value={wx} placeholder="请输入微信号码" onInput={handleInputWx} />
@@ -97,7 +97,7 @@ function Payment() {
       <button className="form-submit" type="button" disabled={isBtnDisabled} onClick={handlePay}>支付</button>
       <a href="javascript:;" className="agreement-link" onClick={handleGoViewAgreement}>《服务协议》</a>
     </div>
-  );
+  ) : null;
 }
 
 export default Payment;
