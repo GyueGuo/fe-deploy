@@ -50,15 +50,7 @@ function RecordList() {
       return null;
     }
     const cb = draw();
-    request({
-      url: '/wx/getPayResult',
-    }).then(({ data }) => {
-      if (data.code === 0) {
-        getList();
-        return;
-      }
-      setErrText(data.message);
-    });
+    getList();
     return cb;
   }, []);
 

@@ -9,6 +9,8 @@ import ajax from '../../utils/request';
 import { wxReg } from '../../utils/utils';
 import './index.less';
 
+const isIos = () => (!!navigator.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/));
+
 function Payment() {
   const history = useHistory();
   const [wx, setWx] = useState('');
@@ -24,6 +26,7 @@ function Payment() {
         Toast.info('请输入正确格式的微信号');
         return;
       }
+      Toast.loading('', 10000);
       ajax({
         url: '/wx/alipay/pay',
         data: {
@@ -31,9 +34,18 @@ function Payment() {
         },
       })
         .then(({ data }) => {
-          document.open();
-          document.write(data);
-          document.close();
+          Toast.hide();
+          const div = document.createElement('div');
+          div.id = 'formWrap';
+          div.style.display = 'none';
+          try {
+            const [html] = data.match(/<form[\s\S]+<\/form>/);
+            div.innerHTML = html;
+            document.body.appendChild(div);
+            document.forms[0].submit();
+          } catch (e) {
+            Toast.info('提单失败，请重试');
+          }
         });
     }
   }, [wx, period]);
@@ -41,7 +53,6 @@ function Payment() {
   const handlePeriodClick = useCallback(({ id }) => (
     setPeriod(id)
   ), []);
-
   const handleGoViewAgreement = useCallback(() => {
     history.push('/agreement');
   }, []);
@@ -64,7 +75,28 @@ function Payment() {
       Toast.info(data.message);
     });
   }, []);
-
+  useEffect(() => {
+    if (isIos) {
+      const reload = (e) => {
+        if (
+          e.persisted
+          || (
+            window.performance && window.performance.navigation.type === 2
+          )
+        ) {
+          const $div = document.getElementById('formWrap');
+          if ($div) {
+            $div.parentNode.removeChild($div);
+          }
+        }
+      };
+      window.addEventListener('pageshow', reload, false);
+      return () => {
+        window.removeEventListener('pageshow', reload, false);
+      };
+    }
+    return null;
+  }, []);
   return periodList.length ? (
     <div className="payment-wrap">
       <div className="form-item">
