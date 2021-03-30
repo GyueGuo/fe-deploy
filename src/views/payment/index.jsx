@@ -33,7 +33,9 @@ function Payment() {
           id: period,
         },
       })
-        .then(({ data }) => {
+        .then((res) => {
+          console.log(res);
+          const { data } = res;
           Toast.hide();
           const div = document.createElement('div');
           div.id = 'formWrap';

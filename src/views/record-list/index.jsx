@@ -44,9 +44,9 @@ function RecordList() {
     })
   ), []);
   useEffect(() => {
-    const { chartRecord } = context.state;
-    if (Array.isArray(chartRecord)) {
-      setList(chartRecord);
+    const { chatRecord } = context.state;
+    if (Array.isArray(chatRecord)) {
+      setList(chatRecord);
       return null;
     }
     const cb = draw();

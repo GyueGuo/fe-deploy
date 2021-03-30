@@ -4,6 +4,7 @@ import React, {
 import ReactDom from 'react-dom';
 import { Router, Route, Switch } from 'react-router';
 import { createHashHistory } from 'history';
+import Vconsole from 'vconsole';
 
 import Index from './views/index';
 import PayError from './views/pay-error';
@@ -18,6 +19,8 @@ import initStore from './store/store';
 import Context from './store/context';
 
 import './app.less';
+
+new Vconsole();
 
 function App() {
   const [state, dispatch] = useReducer(
