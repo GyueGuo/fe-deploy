@@ -34,6 +34,7 @@ function Payment() {
         },
       })
         .then((res) => {
+          console.log(res);
           Toast.hide();
           try {
             const { data } = res;

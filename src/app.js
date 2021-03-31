@@ -19,6 +19,7 @@ import Context from './store/context';
 
 import './app.less';
 
+// new Vconsole();
 
 function App() {
   const [state, dispatch] = useReducer(
@@ -79,6 +80,5 @@ function App() {
     </Context.Provider>
   );
 }
-window.addEventListener('load', () => {
-  ReactDom.render(<App />, document.querySelector('#app'));
-}, false);
+
+ReactDom.render(<App />, document.getElementById('app'));

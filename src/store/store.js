@@ -1,7 +1,10 @@
-let chartRecord = null;
-if (sessionStorage.getItem('chartRecord')) {
-  chartRecord = JSON.parse(sessionStorage.getItem('chartRecord'));
+import { getStorage } from '../utils/storage';
+
+let chatRecord = null;
+const current = getStorage('chatRecord');
+if (current) {
+  chatRecord = JSON.parse(current);
 }
 export default {
-  chartRecord,
+  chatRecord,
 };
