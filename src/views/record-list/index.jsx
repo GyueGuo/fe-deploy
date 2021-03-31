@@ -23,7 +23,7 @@ function RecordList() {
         data,
       },
     });
-  }, []);
+  }, [history]);
   const getList = useCallback(() => (
     request({
       url: '/wx/getChatRecord',

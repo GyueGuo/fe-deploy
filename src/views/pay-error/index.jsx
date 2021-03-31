@@ -8,7 +8,7 @@ function PayError() {
   const history = useHistory();
   const handleClick = useCallback(() => {
     history.replace('/');
-  }, []);
+  }, [history]);
   return (
     <div className="error-wrap">
       <i />

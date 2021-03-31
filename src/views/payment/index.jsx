@@ -34,7 +34,6 @@ function Payment() {
         },
       })
         .then((res) => {
-          console.log(res);
           Toast.hide();
           try {
             const { data } = res;
@@ -46,7 +45,6 @@ function Payment() {
             document.body.appendChild(div);
             document.forms[0].submit();
           } catch (e) {
-            console.log(e);
             Toast.info('提单失败，请重试');
           }
         });
@@ -58,7 +56,7 @@ function Payment() {
   ), []);
   const handleGoViewAgreement = useCallback(() => {
     history.push('/agreement');
-  }, []);
+  }, [history]);
   const isBtnDisabled = useMemo(() => (!wx || period === null), [wx, period]);
 
   useEffect(() => {

@@ -2,9 +2,9 @@ import React, {
   useEffect, useReducer, useRef,
 } from 'react';
 import ReactDom from 'react-dom';
-import { Router, Route, Switch, Redirect } from 'react-router';
-import { createHashHistory } from 'history';
-// import VConsole from 'vconsole';
+import {
+  BrowserRouter, Route, Redirect, Switch,
+} from 'react-router-dom';
 import Index from './views/index';
 import PayError from './views/pay-error';
 import Payment from './views/payment';
@@ -19,8 +19,6 @@ import Context from './store/context';
 
 import './app.less';
 
-// new Vconsole();
-
 function App() {
   const [state, dispatch] = useReducer(
     reducer,
@@ -28,7 +26,7 @@ function App() {
   );
 
   const routes = useRef((
-    <Router history={createHashHistory()}>
+    <BrowserRouter>
       <Switch>
         <Route
           path="/"
@@ -67,7 +65,7 @@ function App() {
         />
         <Redirect to="/" />
       </Switch>
-    </Router>
+    </BrowserRouter>
   ));
   useEffect(() => {
     const $root = document.documentElement;
