@@ -29,6 +29,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "request": "^2.88.2",
+    "vconsole": "^3.4.0",
     "webpack": "^4.44.2"
   },
   "devDependencies": {

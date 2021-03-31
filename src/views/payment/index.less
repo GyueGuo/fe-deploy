@@ -5,12 +5,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 80px 32px 0;
+    padding: 0.6rem 0.64rem 0;
     background-color: #fff;
   
     .form-item {
       border-bottom: 1px solid #eee;
-      line-height: 60px;
+      line-height: 1.2rem;
   
       input {
         box-sizing: border-box;
@@ -19,8 +19,8 @@
         border: none;
         width: 100%;
         color: #333;
-        height: 60px;
-        font-size: 16px;
+        height: 1.2rem;
+        font-size: 0.32rem;
         caret-color: #f64;
         outline: none;
       }
@@ -29,12 +29,12 @@
     .form-submit {
       display: block;
       width: 100%;
-      margin: 50px 0 18px;
-      height: 50px;
+      margin: 1rem 0 0.36rem;
+      height: 1rem;
       border: none;
-      line-height: 50px;
-      font-size: 16px;
-      border-radius: 2px;
+      line-height: 1em;
+      font-size: 0.32rem;
+      border-radius: 0.04rem;
       text-align: center;
       color: #fff;
       background-color: #fc6621;
@@ -47,24 +47,18 @@
   
     .form-entries-wrap a {
       color: #999;
-      font-size: 14px;
+      font-size: 0.28rem;
       text-decoration: none;
     }
   
     .agreement-link {
       position: fixed;
       left: 50%;
-      bottom: 20px;
+      bottom: 0.4rem;
       transform: translate(-50%, 0);
       color: #333;
       font-size: 0.24rem;
     }
-  
-  @media screen and (max-height: 430px) {
-    .agreement-link {
-      display: none
-    }
-  }
   .period-item {
     display: flex;
     color: #333;
@@ -76,7 +70,7 @@
       flex-shrink: 0;
     }
     .item-price {
-      margin: 0 0.2rem;
+      margin: 0 0.4rem;
       width: 0;
       flex: 1;
       text-align: right;
@@ -85,5 +79,11 @@
       flex-shrink: 0;
       color: #fc6621;
     }
+  }
+}
+
+@media screen and (max-height: 400px) {
+  .agreement-link {
+    display: none
   }
 }

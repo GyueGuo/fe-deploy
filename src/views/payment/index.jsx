@@ -26,24 +26,26 @@ function Payment() {
         Toast.info('请输入正确格式的微信号');
         return;
       }
-      Toast.loading('', 10000);
+      Toast.loading('', 10000, null, false);
       ajax({
         url: '/wx/alipay/pay',
         data: {
           id: period,
         },
       })
-        .then(({ data }) => {
+        .then((res) => {
           Toast.hide();
-          const div = document.createElement('div');
-          div.id = 'formWrap';
-          div.style.display = 'none';
           try {
+            const { data } = res;
+            const div = document.createElement('div');
+            div.id = 'formWrap';
+            div.style.display = 'none';
             const [html] = data.match(/<form[\s\S]+<\/form>/);
             div.innerHTML = html;
             document.body.appendChild(div);
             document.forms[0].submit();
           } catch (e) {
+            console.log(e);
             Toast.info('提单失败，请重试');
           }
         });

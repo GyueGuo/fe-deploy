@@ -2,9 +2,9 @@ import React, {
   useEffect, useReducer, useRef,
 } from 'react';
 import ReactDom from 'react-dom';
-import { Router, Route, Switch } from 'react-router';
+import { Router, Route, Switch, Redirect } from 'react-router';
 import { createHashHistory } from 'history';
-
+// import VConsole from 'vconsole';
 import Index from './views/index';
 import PayError from './views/pay-error';
 import Payment from './views/payment';
@@ -18,6 +18,7 @@ import initStore from './store/store';
 import Context from './store/context';
 
 import './app.less';
+
 
 function App() {
   const [state, dispatch] = useReducer(
@@ -63,10 +64,7 @@ function App() {
           component={Video}
           exact
         />
-        <Route
-          path="*"
-          redirect="/"
-        />
+        <Redirect to="/" />
       </Switch>
     </Router>
   ));
@@ -81,5 +79,6 @@ function App() {
     </Context.Provider>
   );
 }
-
-ReactDom.render(<App />, document.querySelector('#app'));
+window.addEventListener('load', () => {
+  ReactDom.render(<App />, document.querySelector('#app'));
+}, false);
