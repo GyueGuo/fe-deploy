@@ -1,10 +1,8 @@
 import React, {
-  useCallback, useEffect, useRef, useState, useContext,
+  useCallback, useEffect, useRef, useState,
 } from 'react';
-import { useHistory } from 'react-router-dom';
+import ReactDom from 'react-dom';
 import { Toast } from 'antd-mobile';
-
-import Context from '../../store/context';
 import request from '../../utils/request';
 import draw from './draw';
 
@@ -13,17 +11,10 @@ import './index.less';
 function RecordList() {
   const [list, setList] = useState([]);
   const [errText, setErrText] = useState('');
-  const context = useContext(Context);
   const $modal = useRef();
-  const history = useHistory();
-  const handleViewDetail = useCallback((data) => {
-    history.push({
-      pathname: '/record-detail',
-      state: {
-        data,
-      },
-    });
-  }, [history]);
+  const handleViewDetail = useCallback((id) => {
+    window.location.href = `/record-detail?id=${id}`;
+  }, []);
   const getList = useCallback(() => (
     request({
       url: '/wx/getChatRecord',
@@ -31,10 +22,7 @@ function RecordList() {
       if (data.code === 0) {
         if (data.result && data.result.length) {
           setList(data.result);
-          context.dispatch({
-            type: 'SET_CHART_RECORD',
-            data: data.result,
-          });
+          sessionStorage.setItem('chatRecord', JSON.stringify(data.result));
         } else {
           setErrText('未找到历史消息');
         }
@@ -44,7 +32,10 @@ function RecordList() {
     })
   ), []);
   useEffect(() => {
-    const { chatRecord } = context.state;
+    let chatRecord = sessionStorage.getItem('chatRecord');
+    if (chatRecord) {
+      chatRecord = JSON.parse(chatRecord);
+    }
     if (Array.isArray(chatRecord)) {
       setList(chatRecord);
       return null;
@@ -69,7 +60,7 @@ function RecordList() {
               // eslint-disable-next-line react/no-array-index-key
               key={index}
               className="record-item"
-              onClick={() => handleViewDetail(item)}
+              onClick={() => handleViewDetail(index)}
             >
               <div className="record-item-img" />
               <dl>
@@ -89,4 +80,4 @@ function RecordList() {
   );
 }
 
-export default RecordList;
+ReactDom.render(<RecordList />, document.getElementById('app'));

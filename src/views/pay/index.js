@@ -1,7 +1,7 @@
 import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
-import { useHistory } from 'react-router-dom';
+import ReactDom from 'react-dom';
 import { Icon, Toast } from 'antd-mobile';
 import classnames from 'classnames';
 
@@ -12,7 +12,6 @@ import './index.less';
 const isIos = () => (!!navigator.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/));
 
 function Payment() {
-  const history = useHistory();
   const [wx, setWx] = useState('');
   const [periodList, setPeriodList] = useState([]);
   const [period, setPeriod] = useState(null);
@@ -55,8 +54,8 @@ function Payment() {
     setPeriod(id)
   ), []);
   const handleGoViewAgreement = useCallback(() => {
-    history.push('/agreement');
-  }, [history]);
+    window.location.href = '/agreement';
+  }, []);
   const isBtnDisabled = useMemo(() => (!wx || period === null), [wx, period]);
 
   useEffect(() => {
@@ -133,4 +132,4 @@ function Payment() {
   ) : null;
 }
 
-export default Payment;
+ReactDom.render(<Payment />, document.getElementById('app'));

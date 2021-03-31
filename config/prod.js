@@ -1,11 +1,29 @@
 const path = require('path');
+const glob = require('glob');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const baseConfig = require('./lib/baseConfig');
 
+const basePath = path.resolve();
+const files = glob.sync(path.join(basePath, 'src/views/**/index.js'));
+const entry = {};
+const htmls = [];
+files.forEach((item) => {
+  const p = item.split('/');
+  const key = p[p.length - 2];
+  entry[key] = item;
+  htmls.push(
+    new HtmlWebpackPlugin({
+      template: path.join(baseConfig.srcPath, 'index.html'),
+      filename: `html/${key}.html`,
+      inject: true,
+      chunks: [key],
+    }),
+  );
+});
 module.exports = {
-  entry: baseConfig.entry,
+  entry,
   output: {
     filename: 'js/[name].js',
     path: baseConfig.distPath,
@@ -91,9 +109,6 @@ module.exports = {
       filename: 'css/[name].css',
       chunkFilename: '[id].css',
     }),
-    new HtmlWebpackPlugin({
-      template: path.join(baseConfig.srcPath, 'index.html'),
-      inject: true,
-    }),
+    ...htmls,
   ],
 };

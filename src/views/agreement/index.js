@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React from 'react';
+import ReactDom from 'react-dom';
 import './index.less';
 
 function Agreement() {
@@ -17,4 +18,4 @@ function Agreement() {
   );
 }
 
-export default Agreement;
+ReactDom.render(<Agreement />, document.getElementById('app'));

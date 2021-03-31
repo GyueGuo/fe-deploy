@@ -14,6 +14,8 @@
   <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.4.0/vconsole.min.js"></script>
   <script>
     new VConsole();
+    var $root = document.documentElement;
+    $root.style.fontSize = (document.documentElement.getBoundingClientRect().width / 750 * 100) + "px";
   </script>
 </head>
 

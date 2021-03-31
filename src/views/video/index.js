@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDom from 'react-dom';
 import ajax from '../../utils/request';
 import './index.less';
 
@@ -22,4 +23,4 @@ function Video() {
   );
 }
 
-export default Video;
+ReactDom.render(<Video />, document.getElementById('app'));

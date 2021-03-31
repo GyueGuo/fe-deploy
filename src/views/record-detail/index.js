@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import classnames from 'classnames';
-import { Modal } from 'antd-mobile';
-import { useLocation } from 'react-router-dom';
+import { Modal, Toast } from 'antd-mobile';
+import ReactDom from 'react-dom';
 import ajax from '../../utils/request';
 import './index.less';
 
 function RecordDetail() {
   const [list, setList] = useState([]);
-  const location = useLocation();
-
   const renderMsg = useCallback((item) => (
     <div
       className={
@@ -28,9 +26,15 @@ function RecordDetail() {
   ), []);
 
   useEffect(() => {
-    const { data } = location.state;
-    setList(data.data);
-  }, [location]);
+    let chatRecord = sessionStorage.getItem('chatRecord');
+    if (chatRecord) {
+      chatRecord = JSON.parse(chatRecord);
+      const id = window.location.search.match(/\?id=(\d+)/)[1];
+      if (id && (id - 0) < chatRecord.length) {
+        setList(chatRecord[id - 0].data);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     ajax({
@@ -60,6 +64,7 @@ function RecordDetail() {
                   input.setSelectionRange(0, result.tipsUrl.length);
                   document.execCommand('copy');
                   document.body.removeChild(input);
+                  Toast.info('已复制');
                 } catch (e) {
                   Modal.alert(
                     '',
@@ -101,4 +106,4 @@ function RecordDetail() {
   );
 }
 
-export default RecordDetail;
+ReactDom.render(<RecordDetail />, document.getElementById('app'));

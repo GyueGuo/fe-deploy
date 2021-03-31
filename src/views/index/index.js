@@ -1,19 +1,16 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-script-url */
-// eslint-disable react/style-prop-object
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import ReactDom from 'react-dom';
 import './index.less';
 import draw from './draw';
 
+const { location } = window;
 function Index() {
-  const history = useHistory();
   const handleFindBack = useCallback(() => {
-    history.push('/pay');
-  }, [history]);
+    location.href = '/pay';
+  }, []);
   const handleViewVideo = useCallback(() => {
-    history.push('/video');
-  }, [history]);
+    location.href = '/video';
+  }, []);
   useEffect(() => {
     const $can = document.querySelector('canvas');
     const { width, height } = $can.getBoundingClientRect();
@@ -54,4 +51,4 @@ function Index() {
   );
 }
 
-export default Index;
+ReactDom.render(<Index />, document.getElementById('app'));

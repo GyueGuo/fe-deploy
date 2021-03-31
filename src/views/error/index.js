@@ -1,14 +1,13 @@
 import React, {
   useCallback,
 } from 'react';
-import { useHistory } from 'react-router-dom';
+import ReactDom from 'react-dom';
 import './index.less';
 
 function PayError() {
-  const history = useHistory();
   const handleClick = useCallback(() => {
-    history.replace('/');
-  }, [history]);
+    window.location.replace('/');
+  }, []);
   return (
     <div className="error-wrap">
       <i />
@@ -18,4 +17,4 @@ function PayError() {
   );
 }
 
-export default PayError;
+ReactDom.render(<PayError />, document.getElementById('app'));
